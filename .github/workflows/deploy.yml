@@ -85,6 +85,9 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # Step 5: Run Terraform Apply to apply the configuration
+    # Step 6: Initialize the Terraform configuration
+    - name: Terraform Init
+
+    # Step 7: Run Terraform Apply to apply the configuration
     - name: Terraform Apply
       run: terraform apply --auto-approve
