@@ -32,11 +32,11 @@ jobs:
     - name: Set up Google Cloud credentials
       id: setup_credentials
       run: |
-          echo "$CREDENTIALS_GCP" > terraform/credentials.json
+          echo "$CREDENTIALS_GCP" > credentials.json
 
     # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
-      run: echo "GOOGLE_APPLICATION_CREDENTIALS=$PWD/terraform/credentials.json" >> $GITHUB_ENV
+      run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
     # Step 4: Install the latest version of Terraform CLI
     - name: Setup Terraform
