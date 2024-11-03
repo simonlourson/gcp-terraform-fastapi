@@ -6,7 +6,7 @@ on:
       project_name:
         description: 'Name of the project'
         required: true
-        default: 'default-project'
+        default: 'doctolib_case_dataops'
 
 env:
   PROJECT_NAME: ${{ github.event.inputs.project_name }}
@@ -21,6 +21,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: terraform
 
     steps:
     # Step 1: Checkout the repository
@@ -43,17 +44,17 @@ jobs:
 
     # Step 5: Initialize the Terraform configuration
     - name: Terraform Init
-      run: terraform init -chdir=terraform
+      run: terraform init 
 
-    # Step 6: Check formatting of Terraform configuration files
-    - name: Terraform Format
-      run: terraform fmt -check -recursive terraform
+    # Step 6: Check conformity of Terraform configuration files
+    - name: Terraform Validate
+      run: terraform validate 
 
     # Step 7: Run Terraform Plan to check for infrastructure changes
     - name: Terraform Plan
-      run: terraform plan -input=false -chdir=terraform
+      run: terraform plan 
 
     # Step 8: On push to the "main" branch, apply the Terraform configuration
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false -chdir=terraform
+      run: terraform apply --auto-approve
