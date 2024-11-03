@@ -87,6 +87,7 @@ jobs:
 
     # Step 6: Initialize the Terraform configuration
     - name: Terraform Init
+      run: terraform init
 
     # Step 7: Run Terraform Apply to apply the configuration
     - name: Terraform Apply
