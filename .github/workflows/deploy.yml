@@ -1,0 +1,64 @@
+name: 'Deploy Infrastructure'
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_name:
+        description: 'Name of the project
+        required: true
+        default: 'default-project'
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Step 2: Set up Google Cloud credentials based on project name
+    - name: Set up Google Cloud credentials
+      id: setup_credentials
+      run: |
+        # Define project-specific secret variable names
+        project_secret="GOOGLE_CREDENTIALS_${{ github.event.inputs.project_name }}"
+        
+        # Output the correct secret's value to be used as GOOGLE_CREDENTIALS
+        echo "GOOGLE_CREDENTIALS=${{ secrets[project_secret] }}" >> $GITHUB_ENV
+        mkdir -p terraform
+        echo "${GOOGLE_CREDENTIALS}" > terraform/credentials.json
+
+    # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
+    - name: Export Google Application Credentials
+      run: echo "GOOGLE_APPLICATION_CREDENTIALS=$PWD/terraform/credentials.json" >> $GITHUB_ENV
+
+    # Step 4: Install the latest version of Terraform CLI
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    # Step 5: Initialize the Terraform configuration
+    - name: Terraform Init
+      run: terraform init -chdir=terraform
+
+    # Step 6: Check formatting of Terraform configuration files
+    - name: Terraform Format
+      run: terraform fmt -check -recursive terraform
+
+    # Step 7: Run Terraform Plan to check for infrastructure changes
+    - name: Terraform Plan
+      run: terraform plan -input=false -chdir=terraform
+
+    # Step 8: On push to the "main" branch, apply the Terraform configuration
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false -chdir=terraform
