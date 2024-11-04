@@ -70,8 +70,8 @@ jobs:
           echo "CREDENTIALS_GCP_NAME=${CREDENTIALS_GCP_NAME}" >> $GITHUB_ENV
 
     # Step 3: Export credentials to credentials.json
-    - name: Set up Google Cloud credentials 2
-      id: setup_credentials_2
+    - name: Export credentials to credentials.json
+      id: export_credentials_json
       env: 
         GCP_CREDENTIALS: ${{ secrets[format('{0}', env.CREDENTIALS_GCP_NAME)] }}
 
@@ -117,8 +117,14 @@ jobs:
         tfstate_bucket_name = "${{ env.PROJECT_NAME }}-terraform"
         fast_api_instance_compute_type = "${{ env.FAST_API_COMPUTE_TYPE }}"
         EOF
+    
+    # Step 10: Export context.tfvars to the terraform GCS Bucket
+    - name: Export context.tfvars to GCS terraform
+      run: |
+        BUCKET_NAME="${{ env.PROJECT_NAME }}-terraform"
+        gsutil cp context.tfvars "gs://$BUCKET_NAME/"
 
-    # Step 10: Run Terraform Plan to check for infrastructure changes
+    # Step 11: Run Terraform Plan to check for infrastructure changes
     - name: Terraform Plan
       id: plan
       run: terraform plan -var-file="context.tfvars"
