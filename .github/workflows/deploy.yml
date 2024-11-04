@@ -32,7 +32,7 @@ jobs:
       id: setup_credentials
       run: |
           CREDENTIALS_GCP_NAME= $(echo "$PROJECT_NAME" | sed 's/-/_/g')
-          echo "CREDENTIALS_GCP=${{ secrets[CREDENTIALS_GCP_NAME] }}" > credentials.env
+          echo "${{ secrets[format('{0}', $CREDENTIALS_GCP_NAME)] }}" > credentials.env
           echo "$CREDENTIALS_GCP" > credentials.json
 
     # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
@@ -92,8 +92,8 @@ jobs:
     - name: Set up Google Cloud credentials
       id: setup_credentials
       run: |
-          CREDENTIALS_GCP_NAME="${{ github.event.inputs.project_name//-/_ }}"
-          echo "CREDENTIALS_GCP=${{ secrets[CREDENTIALS_GCP_NAME] }}" > credentials.env
+          CREDENTIALS_GCP_NAME= $(echo "$PROJECT_NAME" | sed 's/-/_/g')
+          echo "${{ secrets[format('{0}', $CREDENTIALS_GCP_NAME)] }}" > credentials.env
           echo "$CREDENTIALS_GCP" > credentials.json
 
 
