@@ -37,8 +37,11 @@ jobs:
     # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Set up Google Cloud credentials 2
       id: setup_credentials_2
+      env: 
+        GCP_CREDENTIALS: ${{ secrets[format({0}, env.CREDENTIALS_GCP_NAME)] }}
+
       run: |
-          printf "%s" "${{ secrets[env.CREDENTIALS_GCP_NAME] }}" > credentials.json
+          echo "$GCP_CREDENTIALS" | jq . > credentials.json
           cat credentials.json
 
 
