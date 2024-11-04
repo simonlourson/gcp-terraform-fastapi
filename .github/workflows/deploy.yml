@@ -42,7 +42,7 @@ jobs:
     # Step 4: Create Google Cloud bucket if it doesn't exist
     - name: Create GCS Bucket if Not Exists
       run: |
-          gcloud config set project "${{ env.PROJECT_NAME }}
+          gcloud config set project "${{ env.PROJECT_NAME }}"
           BUCKET_NAME="${{ env.PROJECT_NAME }}-terraform"
           if ! gsutil ls -b "gs://$BUCKET_NAME" &>/dev/null; then
             gsutil mb "gs://$BUCKET_NAME"
