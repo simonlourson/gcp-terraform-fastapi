@@ -31,7 +31,7 @@ jobs:
     - name: Set up Google Cloud credentials
       id: setup_credentials
       run: |
-          CREDENTIALS_GCP_NAME="${{ github.event.inputs.project_name//-/_ }}"
+          CREDENTIALS_GCP_NAME= $(echo "$PROJECT_NAME" | sed 's/-/_/g')
           echo "CREDENTIALS_GCP=${{ secrets[CREDENTIALS_GCP_NAME] }}" > credentials.env
           echo "$CREDENTIALS_GCP" > credentials.json
 
