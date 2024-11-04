@@ -93,7 +93,7 @@ jobs:
       id: setup_credentials
       run: |
           CREDENTIALS_GCP_NAME=$(echo "$PROJECT_NAME" | sed 's/-/_/g')
-          echo "CREDENTIALS_GCP=${{ secrets[CREDENTIALS_GCP_NAME)] }}" >> $GITHUB_ENV
+          echo "CREDENTIALS_GCP=${{ secrets[$CREDENTIALS_GCP_NAME)] }}" >> $GITHUB_ENV
           echo "$CREDENTIALS_GCP" > credentials.json
 
 
