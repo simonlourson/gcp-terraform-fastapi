@@ -150,14 +150,22 @@ jobs:
       id: setup_credentials
       run: |
           CREDENTIALS_GCP_NAME=$(echo "$PROJECT_NAME" | sed 's/-/_/g')
-          echo "${CREDENTIALS_GCP_NAME}=${CREDENTIALS_GCP_NAME}" >> $GITHUB_ENV
-          echo "${{ secrets[env.CREDENTIALS_GCP_NAME] }}" > credentials.json
+          echo "CREDENTIALS_GCP_NAME=${CREDENTIALS_GCP_NAME}" >> $GITHUB_ENV
 
-    # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
+    # Step 3: Export credentials to credentials.json
+    - name: Export credentials to credentials.json
+      id: export_credentials_json
+      env: 
+        GCP_CREDENTIALS: ${{ secrets[format('{0}', env.CREDENTIALS_GCP_NAME)] }}
+
+      run: |
+          echo "$GCP_CREDENTIALS" | jq . > credentials.json
+
+    # Step 4: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
-    # Step 4: Install the latest version of Terraform CLI
+    # Step 5: Install the latest version of Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
