@@ -107,7 +107,7 @@ jobs:
     # Step 9: Create context.tfvars file
     - name: Create context.tfvars
       run: |
-        REGION="${{ env.PROJECT_NAME }}" | cut -d '-' -f 3-4
+        REGION=$(echo "${{ env.PROJECT_NAME }}" | cut -d '-' -f 3-4)
         ZONE="${REGION}-${{ env.ZONE }}"      
 
         cat <<EOF > context.tfvars
