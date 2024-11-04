@@ -34,7 +34,7 @@ jobs:
           CREDENTIALS_GCP_NAME=$(echo "$PROJECT_NAME" | sed 's/-/_/g')
           echo "CREDENTIALS_GCP_NAME=${CREDENTIALS_GCP_NAME}" >> $GITHUB_ENV
 
-    # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
+    # Step 3: Export credentials to credentials.json
     - name: Set up Google Cloud credentials 2
       id: setup_credentials_2
       env: 
@@ -47,7 +47,7 @@ jobs:
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
-    # Step 4: Create Google Cloud bucket if it doesn't exist
+    # Step 5: Create Google Cloud bucket if it doesn't exist
     - name: Create GCS Bucket if Not Exists
       run: |
           gcloud auth activate-service-account --key-file=credentials.json
@@ -57,19 +57,19 @@ jobs:
             gsutil mb "gs://$BUCKET_NAME"
           fi
 
-    # Step 5: Install the latest version of Terraform CLI
+    # Step 6: Install the latest version of Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # Step 6: Initialize the Terraform configuration
+    # Step 7: Initialize the Terraform configuration
     - name: Terraform Init
       run: terraform init 
 
-    # Step 7: Check conformity of Terraform configuration files
+    # Step 8: Check conformity of Terraform configuration files
     - name: Terraform Validate
       run: terraform validate 
 
-    # Step 8: Run Terraform Plan to check for infrastructure changes
+    # Step 9: Run Terraform Plan to check for infrastructure changes
     - name: Terraform Plan
       id: plan
       run: terraform plan 

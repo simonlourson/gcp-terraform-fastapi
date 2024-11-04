@@ -31,27 +31,35 @@ jobs:
     - name: Set up Google Cloud credentials
       id: setup_credentials
       run: |
-          CREDENTIALS_GCP_NAME="${{ github.event.inputs.project_name }}"
-          echo "CREDENTIALS_GCP=${{ secrets[CREDENTIALS_GCP_NAME] }}" > credentials.env
-          echo "$CREDENTIALS_GCP" > credentials.json
+          CREDENTIALS_GCP_NAME=$(echo "$PROJECT_NAME" | sed 's/-/_/g')
+          echo "CREDENTIALS_GCP_NAME=${CREDENTIALS_GCP_NAME}" >> $GITHUB_ENV
 
-    # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
+    # Step 3: Export credentials to credentials.json
+    - name: Set up Google Cloud credentials 2
+      id: setup_credentials_2
+      env: 
+        GCP_CREDENTIALS: ${{ secrets[format('{0}', env.CREDENTIALS_GCP_NAME)] }}
+
+      run: |
+          echo "$GCP_CREDENTIALS" | jq . > credentials.json
+
+    # Step 4: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
-    # Step 4: Install the latest version of Terraform CLI
+    # Step 5: Install the latest version of Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # Step 5: Initialize the Terraform configuration
+    # Step 6: Initialize the Terraform configuration
     - name: Terraform Init
       run: terraform init 
 
-    # Step 6: Check conformity of Terraform configuration files
+    # Step 7: Check conformity of Terraform configuration files
     - name: Terraform Validate
       run: terraform validate 
 
-    # Step 7: Run Terraform Plan to check for infrastructure changes
+    # Step 8: Run Terraform Plan to check for infrastructure changes
     - name: Terraform Plan
       id: plan
       run: terraform plan 
@@ -76,22 +84,35 @@ jobs:
     - name: Set up Google Cloud credentials
       id: setup_credentials
       run: |
-          CREDENTIALS_GCP_NAME="${{ github.event.inputs.project_name }}"
-          echo "CREDENTIALS_GCP=${{ secrets[CREDENTIALS_GCP_NAME] }}" > credentials.env
-          echo "$CREDENTIALS_GCP" > credentials.json
+          CREDENTIALS_GCP_NAME=$(echo "$PROJECT_NAME" | sed 's/-/_/g')
+          echo "CREDENTIALS_GCP_NAME=${CREDENTIALS_GCP_NAME}" >> $GITHUB_ENV
 
-    # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
+    # Step 3: Export credentials to credentials.json
+    - name: Set up Google Cloud credentials 2
+      id: setup_credentials_2
+      env: 
+        GCP_CREDENTIALS: ${{ secrets[format('{0}', env.CREDENTIALS_GCP_NAME)] }}
+
+      run: |
+          echo "$GCP_CREDENTIALS" | jq . > credentials.json
+
+    # Step 4: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
-    # Step 4: Install the latest version of Terraform CLI
+    # Step 5: Install the latest version of Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
     # Step 6: Initialize the Terraform configuration
     - name: Terraform Init
-      run: terraform init
+      run: terraform init 
 
-    # Step 7: Run Terraform Destroy to destroy the configuration
+    # Step 7: Check conformity of Terraform configuration files
+    - name: Terraform Validate
+      run: terraform validate 
+
+    # Step 8: Run Terraform Destroy to destroy infrastructure
     - name: Terraform Destroy
-      run: terraform destroy --auto-approve
+      id: plan
+      run: terraform destroy
