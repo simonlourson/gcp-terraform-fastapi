@@ -10,7 +10,6 @@ on:
 
 env:
   PROJECT_NAME: ${{ github.event.inputs.project_name }}
-  CREDENTIALS_GCP: ${{ secrets[github.event.inputs.project_name.replace('-', '_')] }}
 
 jobs:
   terraform_plan:
@@ -32,6 +31,8 @@ jobs:
     - name: Set up Google Cloud credentials
       id: setup_credentials
       run: |
+          CREDENTIALS_GCP_NAME="${{ github.event.inputs.project_name//-/_ }}"
+          echo "CREDENTIALS_GCP=${{ secrets[CREDENTIALS_GCP_NAME] }}" > credentials.env
           echo "$CREDENTIALS_GCP" > credentials.json
 
     # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
@@ -91,7 +92,10 @@ jobs:
     - name: Set up Google Cloud credentials
       id: setup_credentials
       run: |
+          CREDENTIALS_GCP_NAME="${{ github.event.inputs.project_name//-/_ }}"
+          echo "CREDENTIALS_GCP=${{ secrets[CREDENTIALS_GCP_NAME] }}" > credentials.env
           echo "$CREDENTIALS_GCP" > credentials.json
+
 
     # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
