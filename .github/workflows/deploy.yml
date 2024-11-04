@@ -40,12 +40,10 @@ jobs:
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
     # Step 4: Install Google Cloud SDK
-    - name: Install Google Cloud SDK
-      run: |
-          echo "Installing Google Cloud SDK..."
-          sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates gnupg
-          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-          sudo apt-get install -y google-cloud-sdk
+    - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 363.0.0'
 
     # Step 5: Create Google Cloud bucket if it doesn't exist
     - name: Create GCS Bucket if Not Exists
