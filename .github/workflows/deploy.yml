@@ -42,8 +42,6 @@ jobs:
 
       run: |
           echo "$GCP_CREDENTIALS" | jq . > credentials.json
-          cat credentials.json
-
 
     # Step 4: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
