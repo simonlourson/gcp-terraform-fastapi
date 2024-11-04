@@ -6,11 +6,11 @@ on:
       project_name:
         description: 'Name of the project'
         required: true
-        default: 'doctolib_case_dataops'
+        default: 'doctolib-case-dataops'
 
 env:
   PROJECT_NAME: ${{ github.event.inputs.project_name }}
-  CREDENTIALS_GCP: ${{ secrets[format('{0}', github.event.inputs.project_name)] }}
+  CREDENTIALS_GCP: ${{ secrets[github.event.inputs.project_name.replace('-', '_')] }}
 
 jobs:
   terraform_plan:
@@ -38,19 +38,35 @@ jobs:
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
-    # Step 4: Install the latest version of Terraform CLI
+    # Step 4: Install Google Cloud SDK
+    - name: Install Google Cloud SDK
+      run: |
+          echo "Installing Google Cloud SDK..."
+          sudo apt-get update && sudo apt-get install -y apt-transport-https ca-certificates gnupg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          sudo apt-get install -y google-cloud-sdk
+
+    # Step 5: Create Google Cloud bucket if it doesn't exist
+    - name: Create GCS Bucket if Not Exists
+      run: |
+          BUCKET_NAME="${{ env.PROJECT_NAME }}-terraform"
+          if ! gsutil ls -b "gs://$BUCKET_NAME" &>/dev/null; then
+            gsutil mb "gs://$BUCKET_NAME"
+          fi
+
+    # Step 6: Install the latest version of Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # Step 5: Initialize the Terraform configuration
+    # Step 7: Initialize the Terraform configuration
     - name: Terraform Init
       run: terraform init 
 
-    # Step 6: Check conformity of Terraform configuration files
+    # Step 8: Check conformity of Terraform configuration files
     - name: Terraform Validate
       run: terraform validate 
 
-    # Step 7: Run Terraform Plan to check for infrastructure changes
+    # Step 9: Run Terraform Plan to check for infrastructure changes
     - name: Terraform Plan
       id: plan
       run: terraform plan 
@@ -89,6 +105,6 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    # Step 7: Run Terraform Apply to apply the configuration
+    # Step 7: Run Terraform Apply to deploy the configuration
     - name: Terraform Apply
       run: terraform apply --auto-approve
