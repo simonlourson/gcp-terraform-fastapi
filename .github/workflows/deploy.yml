@@ -41,7 +41,7 @@ jobs:
 
     # Step 4: Install Google Cloud SDK
     - name: Set up Google Cloud SDK
-        run: |
+      run: |
           echo "Installing Google Cloud SDK..."
           curl -sSL https://sdk.cloud.google.com | bash
           echo "source $HOME/google-cloud-sdk/path.bash.inc" >> $GITHUB_ENV
