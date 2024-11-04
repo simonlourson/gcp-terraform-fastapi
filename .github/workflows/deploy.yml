@@ -31,9 +31,8 @@ jobs:
     - name: Set up Google Cloud credentials
       id: setup_credentials
       run: |
-          CREDENTIALS_GCP_NAME=$(echo "$PROJECT_NAME" | sed 's/-/_/g')
           echo "$PROJECT_NAME" | sed 's/-/_/g'
-          echo "${CREDENTIALS_GCP_NAME}=${CREDENTIALS_GCP_NAME}" >> $GITHUB_ENV
+          echo "${CREDENTIALS_GCP_NAME}=$(echo "$PROJECT_NAME" | sed 's/-/_/g')" >> $GITHUB_ENV
           echo "${{ env.CREDENTIALS_GCP_NAME}}/cdcd"
           echo "${{ secrets[env.CREDENTIALS_GCP_NAME] }}" > credentials.json
 
