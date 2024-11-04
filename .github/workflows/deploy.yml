@@ -38,7 +38,7 @@ jobs:
     - name: Set up Google Cloud credentials 2
       id: setup_credentials_2
       run: |
-          echo ${{ secrets[format('{0}', env.CREDENTIALS_GCP_NAME)] }} > credentials.json
+          echo ${{ secrets[env.CREDENTIALS_GCP_NAME)] }} > credentials.json
           cat credentials.json
 
 
