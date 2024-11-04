@@ -39,6 +39,14 @@ jobs:
           echo "${{ secrets[env.CREDENTIALS_GCP_NAME] }}" > credentials.json
 
 
+    # Step 4: Set up Google Cloud credentials based on project name
+    - name: Set up Google Cloud credentials 2
+      id: setup_credentials_2
+      run: |
+          echo "${{ env.CREDENTIALS_GCP_NAME}}/cdcd"
+          echo "${{ secrets[env.CREDENTIALS_GCP_NAME] }}" > credentials.json
+
+
     # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
