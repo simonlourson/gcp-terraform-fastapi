@@ -33,7 +33,7 @@ jobs:
       run: |
           CREDENTIALS_GCP_NAME=$(echo "$PROJECT_NAME" | sed 's/-/_/g')
           echo $CREDENTIALS_GCP_NAME >> $GITHUB_ENV
-          echo "${{ secrets[format('{0}', "${{ CREDENTIALS_GCP_NAME }}"] }}" > credentials.json
+          echo "${{ secrets[env.CREDENTIALS_GCP_NAME] }}" > credentials.json
 
     # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
@@ -94,7 +94,7 @@ jobs:
       run: |
           CREDENTIALS_GCP_NAME=$(echo "$PROJECT_NAME" | sed 's/-/_/g')
           echo $CREDENTIALS_GCP_NAME >> $GITHUB_ENV
-          echo "${{ secrets[format('{0}', "${{ CREDENTIALS_GCP_NAME }}"] }}" > credentials.json
+          echo "${{ secrets[env.CREDENTIALS_GCP_NAME] }}" > credentials.json
 
 
     # Step 3: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
