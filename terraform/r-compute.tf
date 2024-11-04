@@ -54,9 +54,9 @@ resource "google_compute_firewall" "allow_ssh" {
 }
 
 resource "google_compute_instance" "fast_api_instance_private" {
-  name                      = "fast-api-instance-${var.environment}"
+  name                      = "${var.project_id}-fast-api-instance"
+  zone = var.zone
   machine_type              = var.fast_api_instance_compute_type
-  zone                      = var.zone
   allow_stopping_for_update = true
 
   boot_disk {
@@ -88,13 +88,15 @@ resource "google_compute_instance" "fast_api_instance_private" {
   depends_on = [
     google_compute_router_nat.nat, 
     google_project_service.iam, 
-    google_sql_database_instance.sql_instance]
+    google_sql_user.db_user,
+    google_sql_database.movie_database
+    ]
 }
 
 resource "google_compute_instance" "bastion_instance" {
-  name         = "bastion-host-${var.environment}"
+  name         = "${var.project_id}-bastion-host"
   machine_type = "e2-micro"
-  zone         = var.zone
+  zone = var.zone
 
   boot_disk {
     initialize_params {

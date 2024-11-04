@@ -2,19 +2,24 @@ from google.cloud import secretmanager
 from google.cloud.sql.connector import Connector, IPTypes
 import sqlalchemy
 from sqlalchemy import text
+import os
+
+project_id = os.getenv("PROJECT_ID")
+region_parts = project_id.split("-")[-2:]
+region = "-".join(region_parts)
 
 # Get the database password from Google Secret Manager
 def get_secret(secret_id):
     client = secretmanager.SecretManagerServiceClient()
-    name = f"projects/doctolib-case-dataops/secrets/{secret_id}/versions/latest"
+    name = f"projects/{project_id}/secrets/{secret_id}/versions/latest"
     response = client.access_secret_version(name=name)
     return response.payload.data.decode("UTF-8")
 
 # Configuration
-db_user = "doctolib-admin"
+db_user = f"{project_id}-sql"
 db_password = get_secret("cloudsql-db-password")
 db_name = "movie_db"
-instance_connection_name = "doctolib-case-dataops:europe-west1:doctolib-sql-instance"
+instance_connection_name = f"{project_id}:{region}:{project_id}-cloud-sql"
 
 # Function to connect using the Google Cloud SQL Connector
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:

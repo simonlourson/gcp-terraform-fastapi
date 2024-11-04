@@ -3,9 +3,13 @@
 # Define the flag file path
 FLAG_FILE="/var/log/fastapi-startup-executed"
 
+# Get the project ID from gcloud
+PROJECT_ID=$(gcloud config get-value project)
+export PROJECT_ID
+
 # Check if the script has already been executed
 if [ -f $FLAG_FILE ]; then
-    gsutil cp gs://doctolib-bucket/main.py .
+    gsutil cp gs://$PROJECT_ID-bucket-data/main.py .
     echo "Startup script has already been executed. Reloading and starting FastAPI service."
     sudo systemctl daemon-reload
     sudo systemctl start fastapi
@@ -29,9 +33,9 @@ mkdir -p "$APP_DIR"
 cd "$APP_DIR"
 
 # Write the FastAPI application to main.py
-gsutil cp gs://doctolib-bucket/main.py .
-gsutil cp gs://doctolib-bucket/movie.sql .
-gsutil cp gs://doctolib-bucket/insert_sql_movies.py .
+gsutil cp gs://$PROJECT_ID-bucket-data/main.py .
+gsutil cp gs://$PROJECT_ID-bucket-data/movie.sql .
+gsutil cp gs://$PROJECT_ID-bucket-data/insert_sql_movies.py .
 
 # Add ~/.local/bin to PATH in current session
 export PATH=$PATH:~/.local/bin
@@ -53,6 +57,7 @@ User=$(whoami)
 Group=www-data
 WorkingDirectory=$APP_DIR
 Environment="PATH=$APP_DIR/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PROJECT_ID=$PROJECT_ID"
 ExecStart=$UVICORN_PATH main:app --host 0.0.0.0 --port 8000
 Restart=always
 

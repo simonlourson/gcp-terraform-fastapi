@@ -25,6 +25,9 @@ resource "google_secret_manager_secret" "db_password_secret" {
   replication {
     auto {}
   }
+  depends_on = [
+    google_project_service.secretmanager
+    ]
 }
 
 # Add the password to the Secret Manager secret as a version
@@ -35,7 +38,7 @@ resource "google_secret_manager_secret_version" "db_password_secret_version" {
 
 
 resource "google_sql_database_instance" "sql_instance" {
-  name             = "doctolib-sql-instance"
+  name             = "${var.project_id}-cloud-sql"
   database_version = "MYSQL_5_7"
   region           = var.region
 
@@ -48,14 +51,17 @@ resource "google_sql_database_instance" "sql_instance" {
     }
   }
   deletion_protection = false
-  depends_on = [google_project_service.servicenetworking,
-  google_service_networking_connection.cloud_sql_private_connection]
+  depends_on = [
+    google_project_service.servicenetworking,
+    google_project_service.sqladmin,
+    google_service_networking_connection.cloud_sql_private_connection,
+  ]
 }
 
 # Set the database user with the generated password
 resource "google_sql_user" "db_user" {
   instance = google_sql_database_instance.sql_instance.name
-  name     = "doctolib-admin"
+  name     = "${var.project_id}-sql"
   password = random_password.db_password.result
   host     = "%"
 }
@@ -66,8 +72,11 @@ resource "google_sql_database" "movie_database" {
 }
 
 resource "google_service_account" "cloud_sql_admin" {
-  account_id   = "sql-access"
-  display_name = "SQL Service Account"
+  account_id   = "api-compute"
+  display_name = "API Service Account"
+  depends_on = [
+    google_project_service.iam
+    ]
 }
 
 resource "google_project_iam_member" "cloud_sql_admin" {
@@ -83,7 +92,7 @@ resource "google_project_iam_member" "secret_manager_accessor" {
 }
 
 resource "google_storage_bucket_iam_member" "bucket_reader" {
-  bucket = google_storage_bucket.doctolib_bucket.name
+  bucket = google_storage_bucket.bucket_data.name
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_service_account.cloud_sql_admin.email}"
 }

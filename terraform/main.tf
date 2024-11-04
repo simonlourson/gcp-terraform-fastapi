@@ -10,7 +10,6 @@ terraform {
     }
     }
     backend "gcs" {
-      bucket = "terraform-state-doctolib"
   }
 }
 provider "google" {
