@@ -39,36 +39,28 @@ jobs:
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
-    # # Step 4: Install Google Cloud SDK
-    # - name: Set up Google Cloud SDK
-    #   run: |
-    #       echo "Installing Google Cloud SDK..."
-    #       curl -sSL https://sdk.cloud.google.com | bash
-    #       echo "source $HOME/google-cloud-sdk/path.bash.inc" >> $GITHUB_ENV
-    #       echo "source $HOME/google-cloud-sdk/completion.bash.inc" >> $GITHUB_ENV
-    #       source $HOME/google-cloud-sdk/path.bash.inc
-
-    # Step 5: Create Google Cloud bucket if it doesn't exist
+    # Step 4: Create Google Cloud bucket if it doesn't exist
     - name: Create GCS Bucket if Not Exists
       run: |
+          gcloud config set project "${{ env.PROJECT_NAME }}
           BUCKET_NAME="${{ env.PROJECT_NAME }}-terraform"
           if ! gsutil ls -b "gs://$BUCKET_NAME" &>/dev/null; then
             gsutil mb "gs://$BUCKET_NAME"
           fi
 
-    # Step 6: Install the latest version of Terraform CLI
+    # Step 5: Install the latest version of Terraform CLI
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
-    # Step 7: Initialize the Terraform configuration
+    # Step 6: Initialize the Terraform configuration
     - name: Terraform Init
       run: terraform init 
 
-    # Step 8: Check conformity of Terraform configuration files
+    # Step 7: Check conformity of Terraform configuration files
     - name: Terraform Validate
       run: terraform validate 
 
-    # Step 9: Run Terraform Plan to check for infrastructure changes
+    # Step 8: Run Terraform Plan to check for infrastructure changes
     - name: Terraform Plan
       id: plan
       run: terraform plan 
