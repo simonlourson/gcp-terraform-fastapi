@@ -98,7 +98,7 @@ jobs:
 
     # Step 7: Initialize the Terraform configuration
     - name: Terraform Init
-      run: terraform init --backend-config="${{ env.PROJECT_NAME }}-terraform"
+      run: terraform init --backend-config="bucket=${{ env.PROJECT_NAME }}-terraform"
 
     # Step 8: Check conformity of Terraform configuration files
     - name: Terraform Validate
@@ -157,7 +157,7 @@ jobs:
 
     # Step 6: Initialize the Terraform configuration
     - name: Terraform Init
-      run: terraform init --backend-config="${{ env.PROJECT_NAME }}-terraform"
+      run: terraform init --backend-config="bucket=${{ env.PROJECT_NAME }}-terraform"
 
     # Step 7: Run Terraform Apply to deploy the configuration
     - name: Terraform Apply with Retry
