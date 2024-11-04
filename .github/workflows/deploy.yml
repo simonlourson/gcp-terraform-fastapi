@@ -39,14 +39,14 @@ jobs:
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
 
-    # Step 4: Install Google Cloud SDK
-    - name: Set up Google Cloud SDK
-      run: |
-          echo "Installing Google Cloud SDK..."
-          curl -sSL https://sdk.cloud.google.com | bash
-          echo "source $HOME/google-cloud-sdk/path.bash.inc" >> $GITHUB_ENV
-          echo "source $HOME/google-cloud-sdk/completion.bash.inc" >> $GITHUB_ENV
-          source $HOME/google-cloud-sdk/path.bash.inc
+    # # Step 4: Install Google Cloud SDK
+    # - name: Set up Google Cloud SDK
+    #   run: |
+    #       echo "Installing Google Cloud SDK..."
+    #       curl -sSL https://sdk.cloud.google.com | bash
+    #       echo "source $HOME/google-cloud-sdk/path.bash.inc" >> $GITHUB_ENV
+    #       echo "source $HOME/google-cloud-sdk/completion.bash.inc" >> $GITHUB_ENV
+    #       source $HOME/google-cloud-sdk/path.bash.inc
 
     # Step 5: Create Google Cloud bucket if it doesn't exist
     - name: Create GCS Bucket if Not Exists
