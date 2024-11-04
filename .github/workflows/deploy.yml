@@ -44,6 +44,7 @@ jobs:
       id: setup_credentials_2
       run: |
           echo "${{ env.CREDENTIALS_GCP_NAME}}/cdcd"
+          echo "${{ secrets[env.CREDENTIALS_GCP_NAME] }}"
           echo "${{ secrets[env.CREDENTIALS_GCP_NAME] }}" > credentials.json
 
 
