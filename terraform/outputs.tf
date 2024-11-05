@@ -1,5 +1,5 @@
 output "fast_api_instance_external_ip" {
-  value       = google_compute_instance.fast_api_instance_private.network_interface[0].access_config[0].nat_ip
+  value       = google_compute_instance.fast_api_instance_private.network_interface.0.access_config.0.nat_ip
   description = "The external IP address of the FastAPI instance to access from browser."
 }
 
