@@ -208,3 +208,7 @@ jobs:
         retry_on: error
         warning_on_retry: true
         continue_on_error: false
+
+    # Step 8: Run Terraform Output
+    - name: Terraform Output 
+      run: terraform output
