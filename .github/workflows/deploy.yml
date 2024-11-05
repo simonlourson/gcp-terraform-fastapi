@@ -172,8 +172,6 @@ jobs:
         gcloud config set project "${{ env.PROJECT_NAME }}"
         BUCKET_NAME="${{ env.PROJECT_NAME }}-terraform"
         gsutil cp "gs://$BUCKET_NAME/context.tfvars" .
-        ls -al
-        cat context.tfvars
 
     # Step 5: Install the latest version of Terraform CLI
     - name: Setup Terraform
@@ -191,7 +189,8 @@ jobs:
         retry_wait_seconds: 60
         max_attempts: 3
         command: |
-          terraform apply -auto-approve -var-file="./context.tfvars"
+          cd terraform
+          terraform apply -auto-approve -var-file="context.tfvars"
         retry_on: error
         warning_on_retry: true
         continue_on_error: false
