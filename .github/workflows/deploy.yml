@@ -1,4 +1,4 @@
-name: 'Deploy Infrastructure'
+name: Deploy Infrastructure for ${{ inputs.project_name }}
 
 on:
   workflow_dispatch:
@@ -164,6 +164,12 @@ jobs:
     # Step 4: Export GOOGLE_APPLICATION_CREDENTIALS environment variable
     - name: Export Google Application Credentials
       run: echo "GOOGLE_APPLICATION_CREDENTIALS=credentials.json" >> $GITHUB_ENV
+
+    # Step 7: Download context.tfvars from GCS
+    - name: Download context.tfvars from GCS
+      run: |
+        BUCKET_NAME="${{ env.PROJECT_NAME }}-terraform"
+        gsutil cp "gs://$BUCKET_NAME/context.tfvars" .
 
     # Step 5: Install the latest version of Terraform CLI
     - name: Setup Terraform
