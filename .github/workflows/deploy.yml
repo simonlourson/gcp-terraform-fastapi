@@ -1,4 +1,4 @@
-name: Deploy Infrastructure for ${{ inputs.project_name }}
+name: Deploy Infrastructure
 
 on:
   workflow_dispatch:
