@@ -168,6 +168,8 @@ jobs:
     # Step 7: Download context.tfvars from GCS
     - name: Download context.tfvars from GCS
       run: |
+        gcloud auth activate-service-account --key-file=credentials.json
+        gcloud config set project "${{ env.PROJECT_NAME }}"
         BUCKET_NAME="${{ env.PROJECT_NAME }}-terraform"
         gsutil cp "gs://$BUCKET_NAME/context.tfvars" .
 
