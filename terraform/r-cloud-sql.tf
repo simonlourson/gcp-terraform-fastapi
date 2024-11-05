@@ -27,7 +27,7 @@ resource "google_secret_manager_secret" "db_password_secret" {
   }
   depends_on = [
     google_project_service.secretmanager
-    ]
+  ]
 }
 
 # Add the password to the Secret Manager secret as a version
@@ -76,7 +76,7 @@ resource "google_service_account" "cloud_sql_admin" {
   display_name = "API Service Account"
   depends_on = [
     google_project_service.iam
-    ]
+  ]
 }
 
 resource "google_project_iam_member" "cloud_sql_admin" {

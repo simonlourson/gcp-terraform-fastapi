@@ -1,5 +1,5 @@
 variable "project_id" {
-  type    = string
+  type = string
   # default = "gpcfastapi-dev-europe-west1"
 }
 

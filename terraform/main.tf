@@ -8,8 +8,8 @@ terraform {
       source  = "hashicorp/google-beta"
       version = "~>4"
     }
-    }
-    backend "gcs" {
+  }
+  backend "gcs" {
   }
 }
 provider "google" {
