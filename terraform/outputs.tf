@@ -1,6 +1,6 @@
-output "fast_api_instance_external_ip" {
-  value       = google_compute_instance.fast_api_instance_private.network_interface.0.access_config.0.nat_ip
-  description = "The external IP address of the FastAPI instance to access from browser."
+output "bastion_instance_external_ip" {
+  value       = google_compute_instance.bastion_instance.network_interface.0.access_config.0.nat_ip
+  description = "The external IP address of the bastion instance to access from browser."
 }
 
 output "project_resource_name" {
