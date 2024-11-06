@@ -46,7 +46,6 @@ jobs:
   terraform_plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
-    environment: production
 
     defaults:
       run:
@@ -131,7 +130,6 @@ jobs:
     name: 'Terraform Apply'
     runs-on: ubuntu-latest
     needs: terraform_plan  # Ensure this job runs after the plan job
-    environment: production
 
     defaults:
       run:

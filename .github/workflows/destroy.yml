@@ -10,7 +10,6 @@ jobs:
     terraform_destroy:
       name: 'Terraform Destroy'
       runs-on: ubuntu-latest
-      environment: production
 
       defaults:
         run:
