@@ -16,7 +16,7 @@
 
 3) Enable the Cloud Resource Manager API from the portal.
 
-From Github: 
+#### From Github: 
 
 1. In Settings -> Secrets & Variables -> Action -> Secrets, create a new Repository secret named after your project\_id. Please replace the “-” by “\_”. Write the content of your previously generated JSON Service Account key in the secret section : ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXe6EY74ad62_ZooiMAS24vhLUnTRF27xsfsDQeMCHrghlz47fvEqYb3I_VsB6A9balwPY3kkGBDw74TvhcG8TjarsGhzVu_P5dT2uLx7FxibZ6sOqqPLLPoPnOIlC_31W1mo4qoDTkVsg1TpLUlN5Ly0zBg?key=QZKkidtLdG74wxg8ycs8D6EV)
 
@@ -64,9 +64,7 @@ The infrastructure comprises a virtual network hosting two subnets. 
   To call the database, the API uses the password of the user \<var.project\_id>-sql defined randomly on Terraform and stored in a secret on **Secret Manager**.
 
 - The \<project\_id>-bucket-data **bucket in Cloud Storage** hosts the source code for :
-
   - database initialisation: (sql and python script that can be run from the VM)
-
   - api operation (main.py using fastAPI)
 
 
@@ -74,7 +72,7 @@ The infrastructure comprises a virtual network hosting two subnets. 
 
 ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXeeCqWVTmCy-DyMhXuwkzNRmxCisjl8QakfR69jBqFS_Lc8pokZTajzhsyXHuHJYD-XXI_Dw6NtzpKsqDNM15LWXkDpw4N1t7TWGINyHhK1sqfTIdNb9SAXWUoPoJ195lszim_dZwmnkNFx_gvwvsKnJeY?key=QZKkidtLdG74wxg8ycs8D6EV)
 
-The deployment and destruction of the GCP infrastructure and API is automated thanks to a CI/CD workflow used by Github Action and using Terraform as the Infrastructure as Code (IaC) tool.
+The deployment and destruction of the GCP infrastructure and API is automated by a CI/CD workflow used by Github Action and using Terraform as the Infrastructure as Code (IaC) tool.
 The deployment workflow is defined in 2 jobs (Terraform Plan and Terraform Apply). 
 They are separated to allow the output of the terraform plan command to be checked before terraform apply is executed (feature not implemented).
 
