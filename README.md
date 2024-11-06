@@ -157,7 +157,7 @@ Roles Assigned:
 
 - roles/iam.securityReviewer: View permissions for security-related settings and configurations, enabling security audits without the ability to make changes.
 
-#### **Two service accounts are not intended for users:**
+### **Two service accounts are not intended for users:**
 
 - The first was created by you during project setup and allows Github Action to run terraform on the project.
 
