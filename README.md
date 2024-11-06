@@ -1,15 +1,14 @@
 <!--StartFragment-->
 
-Implementation of a fastAPI application on GCP. 
-
-Deploying the infrastructure using Terraform.
+# Implementation of a fastAPI application on GCP. 
+# Deploying the infrastructure using Terraform.
 
 <!--StartFragment-->
 
 
 ## How to deploy the API 
 
-From Google Cloud portal: 
+<u>From Google Cloud portal:</u> 
 
 1. Create a project in Google Cloud Platform named this way : \<application>-\<environment>-\<region>. Example : gcpfastapi-dev-west-europe1
 
@@ -29,7 +28,7 @@ From Github: 
 
 4) Wait up to 15 minutes, go on “Terraform Output” step and retrieve the IP under bastion\_instance\_external\_ip = \<external\_ip>
 
-From your internet browser: 
+<u>From your internet browser:</u> 
 
 Past \<retrieved\_external\_ip>/docs in a browser search bar and test the API endpoints in the swagger.
 
@@ -38,7 +37,7 @@ Past \<retrieved\_external\_ip>/docs in a browser search bar and test the API en
 
 ## How to destroy the API infrastructure
 
-From Github: 
+<u>From Github:</u>
 
 1. From the Action tab, run the workflow “Destroy Infrastructure” by selecting the branch named after your project.
 
@@ -58,20 +57,14 @@ The infrastructure comprises a virtual network hosting two subnets. 
 It contains a **VM compute engine named \<project\_id>-fast-api-instance**. This VM contains the API source code and a systemd service that allows it to be exposed on port 8000 as long as the machine is switched on. For security reasons. The machine does not have an external IP address. It is therefore not possible to request the API directly from the Internet using a browser.
 
 - The **second subnet is public**, in the region contained in the project\_id
-
-It hosts the **VM compute engine named \<project\_id>-bastion-host**.
-
-This VM acts as a bridge between the VM in the private subnet and the Internet. To do this, it uses nginx to proxy requests to the FastAPI app through port 8000.
-
-The API is then available at the external address of the bastion (retrievable on GCP or on the step terraform output on Github action) from a browser. The swagger can be used on \<bastion\_external\_ip>/docs.
+  It hosts the **VM compute engine named \<project\_id>-bastion-host**.
+  This VM acts as a bridge between the VM in the private subnet and the Internet. To do this, it uses nginx to proxy requests to the FastAPI app through port 8000.
+  The API is then available at the external address of the bastion (retrievable on GCP or on the step terraform output on Github action) from a browser. The swagger can be used on \<bastion\_external\_ip>/docs.
 
 - The **Cloud SQL instance** contains a MySQL server. It contains an example database containing tables on actors and films. It comes from <https://gist.github.com/ShubhamS32/4c9ccec78a97e7c2bd3461b4e696a559>.
-
-The tables and data are initialised by the VM in the private subnet to the database when it is first started. 
-
-The API then queries the data in the database on Cloud SQL and exposes it on its endpoints.
-
-To call the database, the API uses the password of the user \<var.project\_id>-sql defined randomly on Terraform and stored in a secret on **Secret Manager**.
+  The tables and data are initialised by the VM in the private subnet to the database when it is first started. 
+  The API then queries the data in the database on Cloud SQL and exposes it on its endpoints.
+  To call the database, the API uses the password of the user \<var.project\_id>-sql defined randomly on Terraform and stored in a secret on **Secret Manager**.
 
 - The \<project\_id>-bucket-data **bucket in Cloud Storage** hosts the source code for :
 
@@ -85,14 +78,12 @@ To call the database, the API uses the password of the user \<var.project\_id>-s
 ![](https://lh7-rt.googleusercontent.com/docsz/AD_4nXeeCqWVTmCy-DyMhXuwkzNRmxCisjl8QakfR69jBqFS_Lc8pokZTajzhsyXHuHJYD-XXI_Dw6NtzpKsqDNM15LWXkDpw4N1t7TWGINyHhK1sqfTIdNb9SAXWUoPoJ195lszim_dZwmnkNFx_gvwvsKnJeY?key=QZKkidtLdG74wxg8ycs8D6EV)
 
 The deployment and destruction of the GCP infrastructure and API is automated thanks to a CI/CD workflow used by Github Action and using Terraform as the Infrastructure as Code (IaC) tool.
-
 The deployment workflow is defined in 2 jobs (Terraform Plan and Terraform Apply). 
-
 They are separated to allow the output of the terraform plan command to be checked before terraform apply is executed (feature not implemented).
 
 These two jobs are separated into several steps:
 
-Job Terraform Plan :
+<u>Job Terraform Plan :</u>
 
  
 
@@ -122,9 +113,7 @@ Uses the same 1, 2, 4, 5 steps as Terraform Plan job but 
 
 Both private and public VMs are provisioned by Terraform with a specified startup script.
 
- 
-
-For the private VM (startup\_fastapi.sh): 
+<u>For the private VM (startup\_fastapi.sh):</u> 
 
 - Retrieve the current project information.
 
@@ -132,7 +121,7 @@ For the private VM (startup\_fastapi.sh): 
 
 - Expose the application on port 8000 using systemd.
 
-For the public VM (startup\_bastion.sh):
+<u>For the public VM (startup\_bastion.sh):</u>
 
 - Configures nginx for bastion functionality.
 
@@ -142,8 +131,6 @@ For the public VM (startup\_bastion.sh):
 Initially, the aim was to create **IAM groups** and assign them rights over resources with role sets corresponding to business needs. **Users** would then be added to the groups according to their jobs. However, Cloud Identity could not be configured.
 
 Another solution was adopted, that of creating a **Service Account** for each business need. These account services will then be made accessible to different users according to their business.
-
-.
 
 This is how roles are assigned: 
 
@@ -177,7 +164,7 @@ Roles Assigned:
 
 - roles/iam.securityReviewer: View permissions for security-related settings and configurations, enabling security audits without the ability to make changes.
 
-**Two service accounts are not intended for users:**
+<u>**Two service accounts are not intended for users:**</u>
 
 - The first was created by you during project setup and allows Github Action to run terraform on the project.
 
