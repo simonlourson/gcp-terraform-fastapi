@@ -1,6 +1,7 @@
 name: Deploy Infrastructure
 
 on:
+  push:
   workflow_dispatch:
     inputs:
       zone:
