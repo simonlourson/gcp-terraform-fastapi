@@ -7,7 +7,7 @@
 
 ## How to deploy the API 
 
-#### From Google Cloud portal:</u> 
+#### From Google Cloud portal: 
 
 1. Create a project in Google Cloud Platform named this way : \<application>-\<environment>-\<region>. Example : gcpfastapi-dev-west-europe1
    For the part concerning the region, please use the exact name of the desired region from <https://cloud.google.com/compute/docs/regions-zones>.
@@ -26,7 +26,7 @@ From Github: 
 
 4) Wait up to 15 minutes, go on “Terraform Output” step and retrieve the IP under bastion\_instance\_external\_ip = \<external\_ip>
 
-#### From your internet browser:</u> 
+#### From your internet browser: 
 
 Past \<retrieved\_external\_ip>/docs in a browser search bar and test the API endpoints in the swagger.
 
@@ -35,7 +35,7 @@ Past \<retrieved\_external\_ip>/docs in a browser search bar and test the API en
 
 ## How to destroy the API infrastructure
 
-#### From Github:</u>
+#### From Github:
 
 1. From the Action tab, run the workflow “Destroy Infrastructure” by selecting the branch named after your project.
 
@@ -80,7 +80,7 @@ They are separated to allow the output of the terraform plan command to be check
 
 These two jobs are separated into several steps:
 
-#### Job Terraform Plan :</u>
+#### Job Terraform Plan :
 
 1. Checkout the code on the branch specified at input.
 
@@ -94,21 +94,21 @@ These two jobs are separated into several steps:
 
 6) terraform plan : to visualize the resources that will be deployed later with the described configuration.
 
-Job Terraform Apply :
+#### Job Terraform Apply :
 
 Uses the same 1, 2, 4, 5 steps as Terraform Plan job but 
 
 1. Retrieves the context.tfvars file from the bucket created in the first job.
 
-2) Terraform Apply to deploy the resources on GCP according to the configuration. A retry mechanism has been implemented to restart the command in the event of failure.
+2. terraform apply to deploy the resources on GCP according to the configuration. A retry mechanism has been implemented to restart the command in the event of failure.
 
-3. Terraform output: to display the external ip of the bastion, which can be used to access the API. It also displays the characteristics of resources created for test purposes.
+3. terraform output: to display the external ip of the bastion, which can be used to access the API. It also displays the characteristics of resources created for test purposes.
 
-### How the FastAPI application is set up in the Compute Instance VMs?**
+### How the FastAPI application is set up in the Compute Instance VMs?
 
 Both private and public VMs are provisioned by Terraform with a specified startup script.
 
-#### For the private VM (startup\_fastapi.sh):</u> 
+#### For the private VM (startup\_fastapi.sh): 
 
 - Retrieve the current project information.
 
@@ -116,7 +116,7 @@ Both private and public VMs are provisioned by Terraform with a specified startu
 
 - Expose the application on port 8000 using systemd.
 
-#### For the public VM (startup\_bastion.sh):</u>
+#### For the public VM (startup\_bastion.sh):
 
 - Configures nginx for bastion functionality.
 
@@ -159,7 +159,7 @@ Roles Assigned:
 
 - roles/iam.securityReviewer: View permissions for security-related settings and configurations, enabling security audits without the ability to make changes.
 
-#### **Two service accounts are not intended for users:**</u>
+#### **Two service accounts are not intended for users:**
 
 - The first was created by you during project setup and allows Github Action to run terraform on the project.
 
