@@ -18,7 +18,7 @@ def get_secret(secret_id):
     return response.payload.data.decode("UTF-8")
 
 # Configuration
-db_user = f"{project_id}-sql"
+db_user = f"{project_id}-sq"
 db_password = get_secret("cloudsql-db-password")
 db_name = "movie_db"
 instance_connection_name = f"{project_id}:{region}:{project_id}-cloud-sql"
