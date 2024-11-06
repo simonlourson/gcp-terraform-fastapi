@@ -40,8 +40,8 @@ on:
 
 env:
   PROJECT_NAME: ${{ github.ref_name }}
-  ZONE: ${{ github.event.inputs.zone }}
-  FAST_API_COMPUTE_TYPE: ${{ github.event.inputs.fast_api_instance_compute_type }}
+  ZONE: 'b'
+  FAST_API_COMPUTE_TYPE: 'e2-medium'
 
 jobs:
   terraform_plan:
