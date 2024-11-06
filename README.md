@@ -1,18 +1,16 @@
 <!--StartFragment-->
 
-# Implementation of a fastAPI application on GCP. 
-# Deploying the infrastructure using Terraform.
+# Implementation of a FastAPI application on GCP using Terraform
 
 <!--StartFragment-->
 
 
 ## How to deploy the API 
 
-<u>From Google Cloud portal:</u> 
+#### From Google Cloud portal:</u> 
 
 1. Create a project in Google Cloud Platform named this way : \<application>-\<environment>-\<region>. Example : gcpfastapi-dev-west-europe1
-
-For the part concerning the region, please use the exact name of the desired region from <https://cloud.google.com/compute/docs/regions-zones>.
+   For the part concerning the region, please use the exact name of the desired region from <https://cloud.google.com/compute/docs/regions-zones>.
 
 2. From this project, create a service account, named as you like. You must grant him ownership rights over the project. Save a service account key in json format and store it locally in the keyvault software of your choice.
 
@@ -28,7 +26,7 @@ From Github: 
 
 4) Wait up to 15 minutes, go on “Terraform Output” step and retrieve the IP under bastion\_instance\_external\_ip = \<external\_ip>
 
-<u>From your internet browser:</u> 
+#### From your internet browser:</u> 
 
 Past \<retrieved\_external\_ip>/docs in a browser search bar and test the API endpoints in the swagger.
 
@@ -37,7 +35,7 @@ Past \<retrieved\_external\_ip>/docs in a browser search bar and test the API en
 
 ## How to destroy the API infrastructure
 
-<u>From Github:</u>
+#### From Github:</u>
 
 1. From the Action tab, run the workflow “Destroy Infrastructure” by selecting the branch named after your project.
 
@@ -53,8 +51,7 @@ All azure components are stored in the same project. This project is unique for 
 The infrastructure comprises a virtual network hosting two subnets. 
 
 - The **first subnet is private**, in the region contained in the project\_id. 
-
-It contains a **VM compute engine named \<project\_id>-fast-api-instance**. This VM contains the API source code and a systemd service that allows it to be exposed on port 8000 as long as the machine is switched on. For security reasons. The machine does not have an external IP address. It is therefore not possible to request the API directly from the Internet using a browser.
+  It contains a **VM compute engine named \<project\_id>-fast-api-instance**. This VM contains the API source code and a systemd service that allows it to be exposed on port 8000 as long as the machine is switched on. For security reasons. The machine does not have an external IP address. It is therefore not possible to request the API directly from the Internet using a browser.
 
 - The **second subnet is public**, in the region contained in the project\_id
   It hosts the **VM compute engine named \<project\_id>-bastion-host**.
@@ -83,9 +80,7 @@ They are separated to allow the output of the terraform plan command to be check
 
 These two jobs are separated into several steps:
 
-<u>Job Terraform Plan :</u>
-
- 
+#### Job Terraform Plan :</u>
 
 1. Checkout the code on the branch specified at input.
 
@@ -109,11 +104,11 @@ Uses the same 1, 2, 4, 5 steps as Terraform Plan job but 
 
 3. Terraform output: to display the external ip of the bastion, which can be used to access the API. It also displays the characteristics of resources created for test purposes.
 
-**How the FastAPI application is set up in the Compute Instance VMs?**
+### How the FastAPI application is set up in the Compute Instance VMs?**
 
 Both private and public VMs are provisioned by Terraform with a specified startup script.
 
-<u>For the private VM (startup\_fastapi.sh):</u> 
+#### For the private VM (startup\_fastapi.sh):</u> 
 
 - Retrieve the current project information.
 
@@ -121,7 +116,7 @@ Both private and public VMs are provisioned by Terraform with a specified startu
 
 - Expose the application on port 8000 using systemd.
 
-<u>For the public VM (startup\_bastion.sh):</u>
+#### For the public VM (startup\_bastion.sh):</u>
 
 - Configures nginx for bastion functionality.
 
@@ -164,7 +159,7 @@ Roles Assigned:
 
 - roles/iam.securityReviewer: View permissions for security-related settings and configurations, enabling security audits without the ability to make changes.
 
-<u>**Two service accounts are not intended for users:**</u>
+#### **Two service accounts are not intended for users:**</u>
 
 - The first was created by you during project setup and allows Github Action to run terraform on the project.
 
