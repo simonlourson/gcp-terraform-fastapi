@@ -70,29 +70,3 @@ resource "google_sql_database" "movie_database" {
   name     = "movie_db"
   instance = google_sql_database_instance.sql_instance.name
 }
-
-resource "google_service_account" "cloud_sql_admin" {
-  account_id   = "api-compute"
-  display_name = "API Service Account"
-  depends_on = [
-    google_project_service.iam
-  ]
-}
-
-resource "google_project_iam_member" "cloud_sql_admin" {
-  project = var.project_id
-  role    = "roles/cloudsql.admin"
-  member  = "serviceAccount:${google_service_account.cloud_sql_admin.email}"
-}
-
-resource "google_project_iam_member" "secret_manager_accessor" {
-  project = var.project_id
-  role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${google_service_account.cloud_sql_admin.email}"
-}
-
-resource "google_storage_bucket_iam_member" "bucket_reader" {
-  bucket = google_storage_bucket.bucket_data.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.cloud_sql_admin.email}"
-}

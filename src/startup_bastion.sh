@@ -7,10 +7,10 @@ sudo apt install -y nginx
 sudo tee /etc/nginx/sites-available/default > /dev/null << 'EOL'
 server {
     listen 80;
-    server_name _; # Replace with your public IP or domain
+    server_name _;
 
     location / {
-        proxy_pass http://10.0.0.2:8000;  # Replace with the private IP of the FastAPI instance
+        proxy_pass http://10.0.0.2:8000; 
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

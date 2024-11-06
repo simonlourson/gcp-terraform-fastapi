@@ -195,20 +195,6 @@ jobs:
         warning_on_retry: true
         continue_on_error: false
 
-    # Step 7: Run Terraform Output
-    - name: Terraform Apply with Retry
-      uses: nick-fields/retry@v2.8.3
-      with:
-        timeout_minutes: 30
-        retry_wait_seconds: 60
-        max_attempts: 3
-        command: |
-          cd terraform
-          terraform apply -auto-approve -var-file="context.tfvars"
-        retry_on: error
-        warning_on_retry: true
-        continue_on_error: false
-
     # Step 8: Run Terraform Output
     - name: Terraform Output 
       run: terraform output

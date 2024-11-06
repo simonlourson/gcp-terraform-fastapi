@@ -30,6 +30,14 @@ resource "google_service_account" "auditor_api" {
   ]
 }
 
+resource "google_service_account" "fast_api_compute_sa" {
+  account_id   = "private-vm-sa"
+  display_name = "FastAPI Compute Engine"
+  depends_on = [
+    google_project_service.iam
+  ]
+}
+
 # API Administrators
 resource "google_project_iam_member" "admin_api_roles" {
   project = var.project_id
@@ -80,4 +88,24 @@ resource "google_project_iam_member" "auditor_api_security" {
   project = var.project_id
   role    = "roles/iam.securityReviewer"
   member  = "serviceAccount:${google_service_account.auditor_api.email}"
+}
+
+# To run FastAPI Compute Engine
+
+resource "google_project_iam_member" "fast_api_compute_sa" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.fast_api_compute_sa.email}"
+}
+
+resource "google_project_iam_member" "secret_manager_accessor" {
+  project = var.project_id
+  role    = "roles/secretmanager.secretAccessor"
+  member  = "serviceAccount:${google_service_account.fast_api_compute_sa.email}"
+}
+
+resource "google_storage_bucket_iam_member" "bucket_reader" {
+  bucket = google_storage_bucket.bucket_data.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.fast_api_compute_sa.email}"
 }
