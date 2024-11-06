@@ -61,7 +61,7 @@ resource "google_sql_database_instance" "sql_instance" {
 # Set the database user with the generated password
 resource "google_sql_user" "db_user" {
   instance = google_sql_database_instance.sql_instance.name
-  name     = "${var.project_id}-sql"
+  name     = "${var.project_id}-sq"
   password = random_password.db_password.result
   host     = "%"
 }
